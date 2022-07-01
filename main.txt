@@ -1,0 +1,131 @@
+small ticketing app that has
+1. auth as a service
+2. tickets as a service
+3. orders 
+4. expiration 
+5. payments
+
+{event - driven arc} nodejs+ts+kubernets [micro services arc]
+
+different evenets ---> in this app 
+1. UserCreated 
+2. OrderCreated 
+3. TicketCreated
+4. ChargeCreated
+5. OrderExpired
+6. OrderCancelled
+7. TicketUpdated
+8. UserUpdated 
+
+
+[++] STEP 1 -------
+build auth as  a service along with the kubernetes and docker setup
+
+build the docker image 
+"docker build -t dockerid/auth ."
+Then we create deployment for managaing pods
+
+
+[+] Disclaimer 
+After building the deployment object in kubernetes if want to change the codeBase it is very tedious task to do  means stpes are 
+--> update codeBase
+--> re-build the image 
+---> pish it to docker hub   
+--> run "kubectl rollout restart deployment <depl name>
+
+SO WE USE A SPECIAL TOOLS CALLED skaffold
+we have skaffold configured in the app 
+
+[++++]
+Now for load balancer service we use ingrees/ngnix
+--> we apply a config for ingrees/ngnix
+--> make a config file (ingress-srv.yaml)
+
+ingrees/ngnix -- this will help to redirect trafic to the actual services that running to the cluster
+
+In ingrees/ngnix config file we have an attributes called rules -> this will tell the information about how trafic goes in which backends 
+
+
+_____________________________________________________________
+
+Now we create a cluster is Google Cloud 
+
+How to connect to a google kubernetes cluster
+
+see kubectl use a context --------------------------------
+1. add a context 
+2. add ingress-controller
+3. get auto provision of load balancer of gke
+4. get the ip from there and put in /etc/hosts 
+
+-----------------------------------------------------------
+Ready to connect remote cluster 
+
+
+
+
+[++++++++++++++++++++++++++++++++++++++++++++++++]
+
+Now try to build the Auth service one-by-one module wise 
+SignUp
+SingIn
+SignOut 
+
+
+
+Signup service  --> expect email and password form the user
+
+Erros Handle {
+
+    validation of credentials (express-validator)
+
+    - user defiend erroe handlers
+    data duplicates (email)
+    dataBase connection mentain
+}
+
+Difficulty in error handling :-
+
+1. we must have a consistently structured reponse form 
+   all servers no matter what went worng.
+
+2. A billon things can go wrong , no just validation
+   of inputs to a request handler.Each of these need to
+   handled consistently. (use express error handling mechanism to do this next() function)
+
+
+we are implementing request-validation-error class 
+and database-connection error class and check whick 
+kind of error (which  error instance it is) and send 
+proper responce 
+
+
+Building Abtract class of custom error
+
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+Make connection with moongoDB we use mongo docker image to run mongo instance
+
+
+install mongoose and create a appropriate deployment instance for mongoose
+
+
+pull mongo official image for 
+tells skaffold to build depl for mongo
+
+
+
+++++++++++++++++++++++++++++++++
+
+some new issues with mongoose and typescript
+mongoose and typescript are not fit together 
+
+creating a new  user 
+const user = new User({<any data>})  
+we have to specify the data type of this <any data>  
+little configuration to -> User constructor
