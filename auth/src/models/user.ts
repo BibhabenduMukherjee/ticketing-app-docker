@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+// An Interface that describes the properties
+// that are required eo create a new User
+interface UserAttrs {
+  email: string;
+  password: string;
+}
+
+// An Interface that describes the properties that a User model has
+interface UserModel extends mongoose.Model<any> {
+  build(attrs: UserAttrs): any;
+}
+
 // structure of the data
 const userSchema = new mongoose.Schema({
   email: {
@@ -12,13 +24,19 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// represents entire collection a way to connect
-// application-> database's collection
-//& args (<nameOfModel> Required , <SchemaName> Required)
-const User = mongoose.model("User", userSchema);
+//adding a static properties to a model
+userSchema.statics.build = (attrs: UserAttrs) => {
+  return new User(attrs);
+};
 
-//^ maintain a solid rule the problem is
-// typescripts has no idea which arguments we are send
-// to User() we can make a typo or add more field
+// user model
+const User = mongoose.model<any, UserModel>("User", userSchema);
+
+// User.build is for creating a new User
+// with proper type checking
+User.build({
+  email: "test@test.com",
+  password: "password",
+});
 
 export { User };
