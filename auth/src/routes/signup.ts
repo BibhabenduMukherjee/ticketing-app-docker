@@ -4,33 +4,43 @@ const router = express.Router();
 //import {body} from 'express-validator';
 import { Request, Response } from "express";
 import { RequestValidationError } from "../error/request-validation-error";
-import { DatabaseConnectionError } from "../error/database-connection-errors";
+import { BadRequestError } from "../error/bad-request-error";
+import "express-async-errors";
+import { User } from "../models/user";
+//import { NextFunction } from "express";
 
 // use express-validator as a middleware in the route
+
 router.post(
   "/api/users/signup",
   [
     body("email").isEmail().withMessage("Email must be valid"),
     body("password")
       .trim()
-      .isLength({ min: 5, max: 20 })
-      .withMessage("Password must be valid"),
+      .isLength({ min: 4, max: 20 })
+      .withMessage("Password must be between 4 and 20 characters"),
   ],
-  // now we should send the validate result or message to the user using validationResult
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
+    console.log(errors);
     if (!errors.isEmpty()) {
-      // do not manually solve the error
-      // throw a error
-      //return res.status(400).send(errors.array());
-
       throw new RequestValidationError(errors.array());
+      //next(new RequestValidationError(errors.array()));
     }
 
-    console.log("creating a user");
-    throw new DatabaseConnectionError();
+    const { email, password } = req.body;
+    console.log(email);
+    const existingUser = await User.findOne({ email });
 
-    res.send("user created successfully");
+    if (existingUser) {
+      throw new BadRequestError("Email in use");
+      //return res.send({});
+    }
+
+    const user = User.build({ email, password });
+    await user.save();
+
+    res.status(201).send(user);
   }
 );
 
