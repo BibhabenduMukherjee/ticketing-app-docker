@@ -129,3 +129,18 @@ creating a new  user
 const user = new User({<any data>})  
 we have to specify the data type of this <any data>  
 little configuration to -> User constructor
+
+
+----------------------------------------------------------------
+
+
+After successfull sign up considered a user as 
+loged-in by sending a JWT token in cookei
+We use cookei-session library for that
+
+
+HWT nees a key for sign we need to create a secret pod in kubernetes that manage secret and available for all the services
+
+how to create a secret pod in kubernetes
+
+kubectl create secret generic jwt-secret -from-literal=jwt=<key>
