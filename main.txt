@@ -144,3 +144,9 @@ HWT nees a key for sign we need to create a secret pod in kubernetes that manage
 how to create a secret pod in kubernetes
 
 kubectl create secret generic jwt-secret -from-literal=jwt=<key>
+
+
+
++++++++++++++
+
+Microservices test -> using jest library

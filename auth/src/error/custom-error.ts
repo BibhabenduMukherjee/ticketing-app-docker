@@ -8,3 +8,33 @@ export abstract class CustomError extends Error {
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 }
+
+
+/* 
+
+
+
+a = {
+  name : "Souvik",
+  age : 21
+}
+
+[ 
+  {mess : , field}
+  {mess }
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+  {}
+]
+
+*/
