@@ -7,8 +7,6 @@ deploy:
 build:
   local:
     push: false
-  # googleCloudBuild:
-  #   projectId: tic1-352011
   artifacts:
     - image: bibhabendu123/auth
       context: auth
@@ -17,4 +15,12 @@ build:
       sync:
         manual:
           - src: "src/**/*.ts"
+            dest: .
+    - image: bibhabendu123/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
             dest: .
