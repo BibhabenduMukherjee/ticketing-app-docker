@@ -28,7 +28,7 @@ router.post(
       password
     );
     if (!passwordMatched) {
-      throw new BadRequestError("Incorrect Password");
+      throw new BadRequestError("Incorrect Credential");
     }
 
     const userJwt = jwt.sign(
